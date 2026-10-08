@@ -1,0 +1,231 @@
+//Q1
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+#define MAX 50
+
+struct File {
+    char name[20];
+    int index;
+    int blocks[10];
+    int count;
+};
+
+int main()
+{
+    int n, bit[MAX], i, choice, j;
+    struct File files[MAX];
+    int fcount = 0, index, bcount;
+
+    printf("Enter number of disk blocks: ");
+    scanf("%d", &n);
+
+    srand(time(NULL));
+
+    /* Randomly allocate some blocks */
+    for (i = 0; i < n; i++)
+        bit[i] = rand() % 2;
+
+    while (1)
+    {
+        printf("\n1. Show Bit Vector");
+        printf("\n2. Create New File");
+        printf("\n3. Show Directory");
+        printf("\n4. Exit");
+        printf("\nEnter choice: ");
+        scanf("%d", &choice);
+
+        switch (choice)
+        {
+        case 1:
+            printf("\nBit Vector: ");
+            for (i = 0; i < n; i++)
+                printf("%d ", bit[i]);
+            printf("\n");
+            break;
+
+        case 2:
+            if (fcount >= MAX)
+            {
+                printf("Directory full!\n");
+                break;
+            }
+
+            printf("Enter file name: ");
+            scanf("%s", files[fcount].name);
+
+            printf("Enter number of blocks: ");
+            scanf("%d", &bcount);
+
+            printf("Enter index block: ");
+            scanf("%d", &index);
+
+            if (index < 0 || index >= n || bit[index] == 1)
+            {
+                printf("Index block is not free!\n");
+                break;
+            }
+
+            files[fcount].index = index;
+            bit[index] = 1;
+            files[fcount].count = 0;
+
+            printf("Enter %d data block numbers:\n", bcount);
+            for (j = 0; j < bcount; j++)
+            {
+                scanf("%d", &i);
+
+                if (i >= 0 && i < n && bit[i] == 0)
+                {
+                    files[fcount].blocks[j] = i;
+                    bit[i] = 1;
+                    files[fcount].count++;
+                }
+                else
+                    printf("Block %d is not free!\n", i);
+            }
+
+            fcount++;
+            printf("File created successfully.\n");
+            break;
+
+        case 3:
+            printf("\nFile\tIndex Block\tData Blocks\n");
+            for (i = 0; i < fcount; i++)
+            {
+                printf("%s\t%d\t\t", files[i].name, files[i].index);
+                for (j = 0; j < files[i].count; j++)
+                    printf("%d ", files[i].blocks[j]);
+                printf("\n");
+            }
+            break;
+
+        case 4:
+            exit(0);
+
+        default:
+            printf("Invalid choice!\n");
+        }
+    }
+
+    return 0;
+}
+
+
+//Q2 fork
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+#define MAX 50
+
+struct File
+{
+    char name[20];
+    int index;
+    int blocks[10];
+    int count;
+};
+
+int main()
+{
+    int n, bit[MAX], i, choice, j;
+    struct File files[MAX];
+    int fcount = 0, index, bcount;
+
+    printf("Enter number of disk blocks: ");
+    scanf("%d", &n);
+
+    srand(time(NULL));
+
+    /* Randomly allocate some blocks */
+    for (i = 0; i < n; i++)
+        bit[i] = rand() % 2;
+
+    while (1)
+    {
+        printf("\n1. Show Bit Vector");
+        printf("\n2. Create New File");
+        printf("\n3. Show Directory");
+        printf("\n4. Exit");
+        printf("\nEnter choice: ");
+        scanf("%d", &choice);
+
+        switch (choice)
+        {
+        case 1:
+            printf("\nBit Vector: ");
+            for (i = 0; i < n; i++)
+                printf("%d ", bit[i]);
+            printf("\n");
+            break;
+
+        case 2:
+            printf("Enter file name: ");
+            scanf("%s", files[fcount].name);
+
+            printf("Enter number of blocks: ");
+            scanf("%d", &bcount);
+
+            printf("Enter index block: ");
+            scanf("%d", &index);
+
+            if (index < 0 || index >= n || bit[index] == 1)
+            {
+                printf("Index block is not free!\n");
+                break;
+            }
+
+            files[fcount].index = index;
+            bit[index] = 1;
+            files[fcount].count = 0;
+
+            printf("Enter %d data block numbers:\n", bcount);
+
+            for (j = 0; j < bcount; j++)
+            {
+                scanf("%d", &i);
+
+                if (i >= 0 && i < n && bit[i] == 0)
+                {
+                    files[fcount].blocks[j] = i;
+                    bit[i] = 1;
+                    files[fcount].count++;
+                }
+                else
+                    printf("Block %d is not free!\n", i);
+            }
+
+            fcount++;
+            printf("File created successfully.\n");
+            break;
+
+        case 3:
+            printf("\nFile\tIndex Block\tData Blocks\n");
+
+            for (i = 0; i < fcount; i++)
+            {
+                printf("%s\t%d\t\t",
+                       files[i].name, files[i].index);
+
+                for (j = 0; j < files[i].count; j++)
+                    printf("%d ", files[i].blocks[j]);
+
+                printf("\n");
+            }
+            break;
+
+        case 4:
+            exit(0);
+
+        default:
+            printf("Invalid choice!\n");
+        }
+    }
+
+    return 0;
+}
+
+}
